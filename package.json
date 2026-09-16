@@ -1,0 +1,7 @@
+{
+  "name": "timur-images",
+  "private": true,
+  "scripts": {
+    "rebuild": "sh scripts/rebuild.sh"
+  }
+}
