@@ -1,0 +1,11 @@
+{
+  "name": "timur-images-has-harden-pending-fix",
+  "private": true,
+  "dependencies": {
+    "express": "4.21.1",
+    "fastify": "5.1.0",
+    "pino": "9.5.0",
+    "uuid": "11.0.3",
+    "zod": "3.23.8"
+  }
+}

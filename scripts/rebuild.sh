@@ -2,6 +2,9 @@
 set -e
 
 NS=timurkri
+# Prefix Hub repo names with the GitHub repo name so Aikido name-matching
+# can suggest linking these containers to timur-images.
+IMAGE_PREFIX=timur-images
 ROOT=$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)
 IMAGES="$ROOT/images"
 
@@ -61,23 +64,28 @@ make_public() {
 	return 1
 }
 
+hub_name() {
+	printf '%s-%s' "$IMAGE_PREFIX" "$1"
+}
+
 for case in $CASES; do
-	docker build --pull -t "$NS/$case:latest" "$IMAGES/$case"
+	docker build --pull -t "$NS/$(hub_name "$case"):latest" "$IMAGES/$case"
 done
 
 for case in $CASES; do
-	docker push "$NS/$case:latest"
+	docker push "$NS/$(hub_name "$case"):latest"
 done
 
 failed=0
 for case in $CASES; do
-	json=$(repo_json "$case")
+	repo=$(hub_name "$case")
+	json=$(repo_json "$repo")
 	if is_public "$json"; then
-		echo "public: ${NS}/${case}"
+		echo "public: ${NS}/${repo}"
 		continue
 	fi
-	if ! make_public "$case"; then
-		echo "not public: ${NS}/${case}" >&2
+	if ! make_public "$repo"; then
+		echo "not public: ${NS}/${repo}" >&2
 		failed=1
 	fi
 done
