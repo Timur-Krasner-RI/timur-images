@@ -20,7 +20,85 @@ if [ -z "${CASES# }" ]; then
 	exit 1
 fi
 
-echo "images:${CASES}"
+hub_name() {
+	name_file="$IMAGES/$1/hub-name"
+	if [ -f "$name_file" ]; then
+		head -n 1 "$name_file" | tr -d '\r'
+		return
+	fi
+	printf '%s-%s' "$IMAGE_PREFIX" "$1"
+}
+
+first_from() {
+	awk '
+		$1 == "FROM" {
+			for (i = 2; i <= NF; i++) {
+				if ($i ~ /^-/) {
+					if ($i !~ /=/) i++
+					continue
+				}
+				print $i
+				exit
+			}
+		}
+	' "$1"
+}
+
+image_ref_name() {
+	ref=${1%%@*}
+	printf '%s' "${ref%%:*}"
+}
+
+local_from_case() {
+	want=$(image_ref_name "$1")
+	for c in $CASES; do
+		if [ "$NS/$(hub_name "$c")" = "$want" ]; then
+			printf '%s' "$c"
+			return 0
+		fi
+	done
+	return 1
+}
+
+# Parents (FROM another folder in this repo) must build and push before children.
+ORDERED=
+remaining=$CASES
+guard=0
+while [ -n "$(printf '%s' "$remaining" | tr -d '[:space:]')" ]; do
+	guard=$((guard + 1))
+	if [ "$guard" -gt 50 ]; then
+		echo "cycle in image FROM deps:${remaining}" >&2
+		exit 1
+	fi
+	progress=
+	next=
+	for img in $remaining; do
+		from=$(first_from "$IMAGES/$img/Dockerfile")
+		dep=
+		if dep=$(local_from_case "$from"); then
+			found=
+			for o in $ORDERED; do
+				if [ "$o" = "$dep" ]; then
+					found=1
+					break
+				fi
+			done
+			if [ -z "$found" ]; then
+				next="$next $img"
+				continue
+			fi
+		fi
+		ORDERED="$ORDERED $img"
+		progress=1
+	done
+	if [ -z "$progress" ]; then
+		echo "unresolved FROM deps:${next}" >&2
+		exit 1
+	fi
+	remaining=$next
+done
+
+echo "images:${ORDERED}"
 
 repo_json() {
 	curl -sS "https://hub.docker.com/v2/repositories/${NS}/$1/"
@@ -64,21 +142,12 @@ make_public() {
 	return 1
 }
 
-hub_name() {
-	printf '%s-%s' "$IMAGE_PREFIX" "$1"
-}
-
-for case in $CASES; do
-	docker build --pull -t "$NS/$(hub_name "$case"):latest" "$IMAGES/$case"
-done
-
-for case in $CASES; do
-	docker push "$NS/$(hub_name "$case"):latest"
-done
-
 failed=0
-for case in $CASES; do
-	repo=$(hub_name "$case")
+for img in $ORDERED; do
+	repo=$(hub_name "$img")
+	docker build --pull -t "$NS/${repo}:latest" "$IMAGES/$img"
+	docker push "$NS/${repo}:latest"
+
 	json=$(repo_json "$repo")
 	if is_public "$json"; then
 		echo "public: ${NS}/${repo}"
