@@ -4,13 +4,13 @@ Dockerfiles built and pushed to Docker Hub for Aikido UI testing. Each case is i
 
 | Image | `FROM` | Aikido harden image? |
 | --- | --- | --- |
-| [`timurkri/timur-images-has-harden:latest`](https://hub.docker.com/r/timurkri/timur-images-has-harden) | `python:3.13-slim` | yes |
-| [`timurkri/timur-images-has-harden-pending-fix:latest`](https://hub.docker.com/r/timurkri/timur-images-has-harden-pending-fix) | `node:22-alpine` | yes — later switch to `docker.aikido.io/<token>/node:22-alpine` |
+| [`timurkri/timur-images-has-harden:latest`](https://hub.docker.com/r/timurkri/timur-images-has-harden) | `python:3.10-slim` | yes — older slim tag so Aikido shows CVE reduction |
+| [`timurkri/timur-images-has-harden-pending-fix:latest`](https://hub.docker.com/r/timurkri/timur-images-has-harden-pending-fix) | `node:22-bookworm-slim` | yes — later switch to `docker.aikido.io/<token>/node:22-bookworm-slim` |
 | [`timurkri/timur-images-no-harden:latest`](https://hub.docker.com/r/timurkri/timur-images-no-harden) | `httpd:2.4-alpine` | no |
 | [`timurkri/in-use-harden-image:latest`](https://hub.docker.com/r/timurkri/in-use-harden-image) | `docker.aikido.io/1d624ff6a3842cfbc99ca/alpine:3.18` | already using one (this is the custom base) |
 | [`timurkri/timur-images-from-in-use-harden:latest`](https://hub.docker.com/r/timurkri/timur-images-from-in-use-harden) | `timurkri/in-use-harden-image:latest` | transitive — parent is built FROM an Aikido image |
-| [`timurkri/node22alpine:latest`](https://hub.docker.com/r/timurkri/node22alpine) | `node:22-alpine` | catalog has a harden image, this Hub image does not use it |
-| [`timurkri/timur-images-alpine318:latest`](https://hub.docker.com/r/timurkri/timur-images-alpine318) | `alpine:3.18` | catalog has a harden image, this Hub image does not use it |
+| [`timurkri/node22alpine:latest`](https://hub.docker.com/r/timurkri/node22alpine) | `node:22-bookworm-slim` | catalog harden exists; official tag still has many CVEs Aikido fixes |
+| [`timurkri/timur-images-alpine318:latest`](https://hub.docker.com/r/timurkri/timur-images-alpine318) | `alpine:3.17` | catalog harden exists; 3.17 (not 3.18) so Aikido actually reduces open CVEs |
 
 `has-harden` and `has-harden-pending-fix` install a small app dependency set (see `requirements.txt` / `package.json` next to those Dockerfiles) so SBOM matching has something other than the base image to score against this repo.
 

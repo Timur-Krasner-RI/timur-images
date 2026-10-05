@@ -1,5 +1,6 @@
 # Aikido has a harden image for this base.
-FROM python:3.13-slim
+# 3.10-slim has a larger official-vs-Aikido CVE delta than 3.13-slim.
+FROM python:3.10-slim
 
 # Do not set aik:repository / org.opencontainers.image.source — those hard-link
 # the container. This fixture is meant to exercise name + SBOM *suggestions*.
