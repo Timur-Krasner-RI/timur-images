@@ -1,0 +1,8 @@
+ARG BASE
+FROM ${BASE}
+
+COPY memory.ini /usr/local/etc/php/conf.d/zz-memory.ini
+COPY zz-single-worker.conf /usr/local/etc/php-fpm.d/zz-single-worker.conf
+COPY index.php /var/www/html/index.php
+
+CMD ["php-fpm"]

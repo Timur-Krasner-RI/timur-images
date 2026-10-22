@@ -1,0 +1,7 @@
+ARG BASE
+FROM ${BASE}
+
+COPY memory.ini /usr/local/etc/php/conf.d/zz-memory.ini
+COPY index.php /var/www/html/index.php
+
+CMD ["apache2-foreground"]

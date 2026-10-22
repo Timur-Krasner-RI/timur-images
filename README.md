@@ -11,11 +11,22 @@ Dockerfiles built and pushed to Docker Hub for Aikido UI testing. Each case is i
 | [`timurkri/timur-images-from-in-use-harden:latest`](https://hub.docker.com/r/timurkri/timur-images-from-in-use-harden) | `timurkri/in-use-harden-image:latest` | transitive — parent is built FROM an Aikido image |
 | [`timurkri/node22alpine:latest`](https://hub.docker.com/r/timurkri/node22alpine) | `node:22-bookworm-slim` | catalog harden exists; official tag still has many CVEs Aikido fixes |
 | [`timurkri/timur-images-alpine318:latest`](https://hub.docker.com/r/timurkri/timur-images-alpine318) | `alpine:3.17` | catalog harden exists; 3.17 (not 3.18) so Aikido actually reduces open CVEs |
+| [`timurkri/timur-images-curl820:latest`](https://hub.docker.com/r/timurkri/timur-images-curl820) | `curlimages/curl:8.20.0` | official curl image |
+| [`timurkri/timur-images-curl820-aikido:latest`](https://hub.docker.com/r/timurkri/timur-images-curl820-aikido) | `docker.aikido.io/1d624ff6a3842cfbc99ca/curlimages/curl:8.20.0` | already using one (Aikido curl base) |
+| [`timurkri/root-php-8-4-26-apache:latest`](https://hub.docker.com/r/timurkri/root-php-8-4-26-apache) | `cr.root.io/php:8.4.26-apache` | already using one (Root PHP apache base) |
+| [`timurkri/root-php-8-5-11-cli:latest`](https://hub.docker.com/r/timurkri/root-php-8-5-11-cli) | `cr.root.io/php:8.5.11-cli` | already using one (Root PHP cli base) |
+| [`timurkri/root-php-8-5-11-fpm:latest`](https://hub.docker.com/r/timurkri/root-php-8-5-11-fpm) | `cr.root.io/php:8.5.11-fpm` | already using one (Root PHP fpm base) |
+| [`timurkri/upstream-php-8-4-26-apache:latest`](https://hub.docker.com/r/timurkri/upstream-php-8-4-26-apache) | `php:8.4.26-apache` | official Docker Hub PHP apache image |
+| [`timurkri/upstream-php-8-5-11-cli:latest`](https://hub.docker.com/r/timurkri/upstream-php-8-5-11-cli) | `php:8.5.11-cli` | official Docker Hub PHP cli image |
+| [`timurkri/upstream-php-8-5-11-fpm:latest`](https://hub.docker.com/r/timurkri/upstream-php-8-5-11-fpm) | `php:8.5.11-fpm` | official Docker Hub PHP fpm image |
 
 `has-harden` and `has-harden-pending-fix` install a small app dependency set (see `requirements.txt` / `package.json` next to those Dockerfiles) so SBOM matching has something other than the base image to score against this repo.
 
+`scripts/php-oom-test.py` builds a temporary app layer on the local `root-php-*` and `upstream-php-*` images and pushes requests past the soft and hard memory limits. The app lives in `images/php-app`. These images do not include the PHP source test suite, so this does not run the upstream `oom_*.phpt` files.
+
 ```bash
 npm run rebuild
+python3 scripts/php-oom-test.py
 ```
 
 Rebuilds, pushes, and marks public every folder under `images/` that has a Dockerfile. Default Hub name is `timurkri/timur-images-<folder>:latest`. A `hub-name` file overrides that (`in-use-harden-image` publishes as `timurkri/in-use-harden-image`). Images that `FROM` another image in this repo are built and pushed after their parent.
