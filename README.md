@@ -19,6 +19,7 @@ Dockerfiles built and pushed to Docker Hub for Aikido UI testing. Each case is i
 | [`timurkri/upstream-php-8-4-26-apache:latest`](https://hub.docker.com/r/timurkri/upstream-php-8-4-26-apache) | `php:8.4.26-apache` | official Docker Hub PHP apache image |
 | [`timurkri/upstream-php-8-5-11-cli:latest`](https://hub.docker.com/r/timurkri/upstream-php-8-5-11-cli) | `php:8.5.11-cli` | official Docker Hub PHP cli image |
 | [`timurkri/upstream-php-8-5-11-fpm:latest`](https://hub.docker.com/r/timurkri/upstream-php-8-5-11-fpm) | `php:8.5.11-fpm` | official Docker Hub PHP fpm image |
+| [`timurkri/upstream-node-24-22-1-bookworm-slim:latest`](https://hub.docker.com/r/timurkri/upstream-node-24-22-1-bookworm-slim) | `node:24.22.1-bookworm-slim` | official Docker Hub Node bookworm-slim image |
 
 `has-harden` and `has-harden-pending-fix` install a small app dependency set (see `requirements.txt` / `package.json` next to those Dockerfiles) so SBOM matching has something other than the base image to score against this repo.
 
