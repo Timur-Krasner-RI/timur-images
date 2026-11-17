@@ -19,7 +19,16 @@ Dockerfiles built and pushed to Docker Hub for Aikido UI testing. Each case is i
 | [`timurkri/upstream-php-8-4-26-apache:latest`](https://hub.docker.com/r/timurkri/upstream-php-8-4-26-apache) | `php:8.4.26-apache` | official Docker Hub PHP apache image |
 | [`timurkri/upstream-php-8-5-11-cli:latest`](https://hub.docker.com/r/timurkri/upstream-php-8-5-11-cli) | `php:8.5.11-cli` | official Docker Hub PHP cli image |
 | [`timurkri/upstream-php-8-5-11-fpm:latest`](https://hub.docker.com/r/timurkri/upstream-php-8-5-11-fpm) | `php:8.5.11-fpm` | official Docker Hub PHP fpm image |
-| [`timurkri/upstream-node-24-22-1-bookworm-slim:latest`](https://hub.docker.com/r/timurkri/upstream-node-24-22-1-bookworm-slim) | `node:24.22.1-bookworm-slim` | official Docker Hub Node bookworm-slim image |
+| [`timurkri/upstream-node-24-22-1-bookworm-slim:latest`](https://hub.docker.com/r/timurkri/upstream-node-24-22-1-bookworm-slim) | `node:24.22.1-bookworm-slim` | yes — later maintained patch `node:24.22.3-bookworm-slim` |
+| [`timurkri/timur-images-node-24-22-3-bookworm-slim:latest`](https://hub.docker.com/r/timurkri/timur-images-node-24-22-3-bookworm-slim) | `node:24.22.3-bookworm-slim` | yes — already the latest maintained patch of that line |
+| [`timurkri/timur-images-node-24-22-1-alpine323:latest`](https://hub.docker.com/r/timurkri/timur-images-node-24-22-1-alpine323) | `node:24.22.1-alpine3.23` | yes — later maintained patch `node:24.22.3-alpine3.23`, not bookworm-slim |
+| [`timurkri/timur-images-node-24-22-slim:latest`](https://hub.docker.com/r/timurkri/timur-images-node-24-22-slim) | `node:24.22-slim` | yes — major.minor plus suffix, and that tag is maintained |
+| [`timurkri/timur-images-ubuntu-22-04:latest`](https://hub.docker.com/r/timurkri/timur-images-ubuntu-22-04) | `ubuntu:22.04` | yes — major.minor tag, exact maintained entry (`22.04-fips` is a different suffix) |
+| [`timurkri/timur-images-node-24-22-1-bookworm:latest`](https://hub.docker.com/r/timurkri/timur-images-node-24-22-1-bookworm) | `node:24.22.1-bookworm` | no — hardened, not maintained; bookworm-slim is a different suffix |
+| [`timurkri/timur-images-node-24-22-1-slim:latest`](https://hub.docker.com/r/timurkri/timur-images-node-24-22-1-slim) | `node:24.22.1-slim` | no — maintained `node:24.22-slim` is an older patch; `slim-hardened` is a different suffix |
+| [`timurkri/timur-images-node-18-20-7-bookworm-slim:latest`](https://hub.docker.com/r/timurkri/timur-images-node-18-20-7-bookworm-slim) | `node:18.20.7-bookworm-slim` | no — hardened, not maintained, and no newer maintained patch |
+| [`timurkri/timur-images-node-22-bookworm:latest`](https://hub.docker.com/r/timurkri/timur-images-node-22-bookworm) | `node:22-bookworm` | no — not a patch tag; maintained `node:22-bookworm-slim` is a different tag |
+| [`timurkri/timur-images-ubuntu-jammy:latest`](https://hub.docker.com/r/timurkri/timur-images-ubuntu-jammy) | `ubuntu:jammy` | no — named tag, not an exact maintained entry |
 
 `has-harden` and `has-harden-pending-fix` install a small app dependency set (see `requirements.txt` / `package.json` next to those Dockerfiles) so SBOM matching has something other than the base image to score against this repo.
 
